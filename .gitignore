@@ -5,4 +5,4 @@ __pycache__/
 venv/
 
 # ignores db file
-app.db
+danielfitz.db
