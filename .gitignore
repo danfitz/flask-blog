@@ -1,0 +1,5 @@
+# ignores __pycache__
+__pycache__/
+
+# ignores venv
+venv/
