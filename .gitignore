@@ -3,3 +3,6 @@ __pycache__/
 
 # ignores venv
 venv/
+
+# ignores db file
+app.db

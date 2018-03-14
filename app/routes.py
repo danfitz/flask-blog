@@ -1,5 +1,6 @@
+from flask import render_template, url_for, redirect, flash
 from app import app
-from flask import render_template, url_for, redirect
+from app.forms import LoginForm
 
 @app.route("/")
 def index():
@@ -36,3 +37,11 @@ def journal():
         }
     ]
     return render_template("journal.html", title="Journal", posts=journal_posts)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash("Hi, Dan!")
+        return redirect(url_for("index"))
+    return render_template("login.html", title="Log In", form=form)
