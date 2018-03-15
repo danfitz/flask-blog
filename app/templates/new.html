@@ -1,0 +1,52 @@
+<div style="text-align: center;">
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.published() }} ∞ {{ form.published.label }}
+        </p>
+        <p>
+            ∞ {{ form.title.label }} ∞<br>
+            {{ form.title(size=50) }}<br>
+            {% for error in form.title.errors %}
+            <span style="color: red; font-style: italic;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            ∞ {{ form.slug.label }} ∞<br>
+            {{ form.slug(size=50) }}<br>
+            {% for error in form.slug.errors %}
+            <span style="color: red; font-style: italic;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            ∞ {{ form.category.label }} ∞<br>
+            {{ form.category() }}<br>
+            {% for error in form.category.errors %}
+            <span style="color: red; font-style: italic;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.featured_img() }} ∞ {{ form.featured_img.label }}
+            {% for error in form.featured_img.errors %}
+            <span style="color: red; font-style: italic;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            ∞ {{ form.excerpt.label }} ∞<br>
+            {{ form.excerpt(cols=100, rows=3) }}<br>
+            {% for error in form.excerpt.errors %}
+            <span style="color: red; font-style: italic;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            ∞ {{ form.content.label }} ∞<br>
+            {{ form.content(cols=100, rows=80) }}<br>
+            {% for error in form.content.errors %}
+            <span style="color: red; font-style: italic;">{{ error }}</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.submit() }}
+        </p>
+    </form>
+</div>
