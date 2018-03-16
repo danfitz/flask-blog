@@ -42,13 +42,13 @@ class Post(db.Model):
 
     def save_img(self, img_file):
         static_folder = app.config["STATIC_FOLDER"]
-        post_folder = os.path.join("posts", r"{}_{}".format(self.category, self.title))
+        post_folder = os.path.join("posts", self.slug)
         abs_folder = os.path.join(static_folder, post_folder)
 
         if not os.path.exists(abs_folder):
             os.makedirs(abs_folder)
 
-        img_filename = self.title + img_file.filename[-4:]
+        img_filename = self.slug + img_file.filename[-4:]
         img_file.save(os.path.join(abs_folder, img_filename))
 
         img_path = os.path.join(post_folder, img_filename)
@@ -56,13 +56,13 @@ class Post(db.Model):
 
     def save_content(self):
         static_folder = app.config["STATIC_FOLDER"]
-        post_folder = os.path.join("posts", r"{}_{}".format(self.category, self.title))
+        post_folder = os.path.join("posts", self.slug)
         abs_folder = os.path.join(static_folder, post_folder)
 
         if not os.path.exists(abs_folder):
             os.makedirs(abs_folder)
 
-        post_filename = os.path.join(abs_folder, "{}.md".format(self.title))
+        post_filename = os.path.join(abs_folder, "{}.md".format(self.slug))
         post_file = open(post_filename, "w")
         post_file.write(self.content)
         post_file.close()

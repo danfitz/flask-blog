@@ -9,8 +9,9 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField("Remember Me", default=True)
     submit = SubmitField("Log In")
 
-class NewPostForm(FlaskForm):
+class PublishForm(FlaskForm):
     published = BooleanField("Publish?", default=True)
+    update_timestamp = BooleanField("Update timestamp?")
     title = StringField("Title", validators=[DataRequired()])
     slug = StringField("Slug", validators=[DataRequired()])
     category = SelectField(

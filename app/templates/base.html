@@ -55,7 +55,7 @@
 	          		<a href="#about-footer">About</a>
 					<br>
 					{% if current_user.is_authenticated %}
-					<a href="{{ url_for('new') }}">New</a>
+					<a href="{{ url_for('dashboard') }}">Dashboard</a>
 					{% endif %}
 				</p>
 	      	</div>

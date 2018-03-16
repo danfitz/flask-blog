@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="posts">
+	{% if current_user.is_authenticated %}
+	<div class="post-container">
+		<a href="{{ url_for('edit', slug=post.slug) }}">Edit</a>
+	</div>
+	{% endif %}
+	<div class="post-container">
+		<h1>{{ post.title }}</h1>
+		<br>
+		<img class="featured-image" src="{{ url_for('static', filename=post.featured_img) }}">
+		{% filter markdown %}{{ post.content }}{% endfilter %}
+	</div>
+</div>
+{% endblock %}

@@ -9,8 +9,8 @@
 
 		{% for post in posts %}
 			<div class="post-container">
-				<h2><a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a></h2>
-				<p><em>∞ {{ post.timestamp }} ∞</em></p>
+				<h2><a href="{{ url_for('post', slug=post.slug) }}" title="{{ post.title }}">{{ post.title }}</a></h2>
+				<p class="meta"><em>∞ {{ post.timestamp }} ∞</em></p>
 				<p>{{ post.excerpt }}</p>
 			</div>
 		{% endfor %}

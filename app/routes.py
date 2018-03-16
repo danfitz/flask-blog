@@ -2,62 +2,44 @@ from flask import render_template, url_for, redirect, flash, request
 from app import app, db, pagedown
 
 from app.models import Author, Post
-from app.forms import LoginForm, NewPostForm
+from app.forms import LoginForm, PublishForm
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from datetime import datetime
-import os
+import os, shutil
 
+# returns index.html showing non-journal posts in descending timestamp order
 @app.route("/")
 def index():
-    posts = [
-        {
-            "title": "Hygge",
-            "content": "*Hygge can increase happiness by a few points.* OK?",
-            "url": url_for("index"),
-            "featured": url_for("static", filename="images/featured/hygge.jpg")
-        },
-        {
-            "title": "Let's write!",
-            "content": "Writing is therapeutic for the soul.",
-            "url": url_for("index"),
-            "featured": url_for("static", filename="images/featured/paper table.jpg")
-        }
-    ]
     posts = Post.query.filter(
         Post.published==True,
         Post.category!="journal").order_by(
             Post.timestamp.desc())
     return render_template("index.html", title="Dan Fitz", posts=posts)
 
+# returns journal.html showing journal posts in descending timestamp order
 @app.route("/journal")
 @login_required
 def journal():
-    journal_posts = [
-        {
-            "title": "Hygge",
-            "excerpt": "Hygge can increase happiness by a few points.",
-            "url": url_for("index"),
-            "date": "November 5, 2017"
-        },
-        {
-            "title": "Let's write!",
-            "excerpt": "Writing is therapeutic for the soul.",
-            "url": url_for("index"),
-            "date": "October 19, 2018"
-        }
-    ]
     journal_posts = Post.query.filter(
         Post.published==True,
         Post.category=="journal").order_by(
             Post.timestamp.desc())
     return render_template("journal.html", title="Journal", posts=journal_posts)
 
+# return specific post according to its unique slug
+@app.route("/post/<slug>")
+def post(slug):
+    post = Post.query.filter_by(slug=slug).first_or_404()
+    return render_template("post.html", title=post.title, post=post)
+
+# submits new post to database
 @app.route("/new", methods=["GET", "POST"])
 @login_required
 def new():
-    form = NewPostForm()
+    form = PublishForm()
     if form.validate_on_submit():
+        # creates post instance
         post = Post(
             timestamp=datetime.utcnow(),
             published=form.published.data,
@@ -69,21 +51,82 @@ def new():
             author=current_user
         )
 
+        # saves post markdown file and image file into app/static/posts/<slug> folder
         post.save_content()
-        
         img_file = form.featured_img.data
         if img_file and img_file.filename.endswith(("jpg", "png")):
             img_path = post.save_img(img_file)
             post.featured_img = img_path
 
+        # commits post instance to database
         db.session.add(post)
         db.session.commit()
+
         if post.published == True:
             flash("'{}' published!".format(post.title))
         else:
             flash("'{}' drafted!".format(post.title))
         return redirect(url_for("index"))
     return render_template("new.html", title="New Post", form=form)
+
+# edits posts already in database
+@app.route("/edit/<slug>", methods=["GET", "POST"])
+@login_required
+def edit(slug):
+    # grabs post by slug
+    post = Post.query.filter_by(slug=slug).first()
+    form = PublishForm()
+    if form.validate_on_submit():
+        # updates post instance's attributes
+        if form.slug.data != post.slug:
+            # deletes backup folder if slug was changed
+            shutil.rmtree(os.path.join(app.config["STATIC_FOLDER"] + os.path.sep + "posts" + os.path.sep + post.slug))
+        if form.update_timestamp.data == True:
+            post.timestamp = datetime.utcnow()
+        post.published = form.published.data
+        post.title = form.title.data
+        post.slug = form.slug.data
+        post.category = form.category.data
+        post.excerpt = form.excerpt.data
+        post.content = form.content.data
+
+        # if the slug was new, creates new folder and new files
+        # if slug was the same, keeps folder but overrides old files
+        post.save_content()
+        img_file = form.featured_img.data
+        if img_file and img_file.filename.endswith(("jpg", "png")):
+            img_path = post.save_img(img_file)
+            post.featured_img = img_path
+
+        # commits post instance to database
+        db.session.add(post)
+        db.session.commit()
+
+        if post.published == True:
+            flash("'{}' published!".format(post.title))
+        else:
+            flash("'{}' drafted!".format(post.title))
+        return redirect(url_for("post", slug=post.slug))
+
+    # populates form with current post instance's attributes when entering form
+    elif request.method == "GET":
+        form.published.data = post.published
+        form.title.data = post.title
+        form.slug.data = post.slug
+        form.category.data = post.category
+        form.excerpt.data = post.excerpt
+        form.content.data = post.content
+
+    return render_template("edit.html", title="Edit Post", form=form)
+
+@app.route("/dashboard")
+def dashboard():
+    drafts = Post.query.filter_by(published=False).order_by(Post.timestamp.desc())
+    first_world_problems = Post.query.filter_by(category="first-world-problems").order_by(Post.timestamp.desc())
+    self_actualization = Post.query.filter_by(category="self_actualization").order_by(Post.timestamp.desc())
+    relationships = Post.query.filter_by(category="relationships").order_by(Post.timestamp.desc())
+    journal = Post.query.filter_by(category="journal").order_by(Post.timestamp.desc())
+    return render_template("dashboard.html", title="Dashboard", drafts=drafts, first_world_problems=first_world_problems, self_actualization=self_actualization, relationships=relationships, journal=journal)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

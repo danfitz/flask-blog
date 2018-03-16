@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="posts">
+	{% if current_user.is_authenticated %}
+    <div class="post-container">
+        <h1>Dashboard</h1>
+        <h3><a href="{{ url_for('new') }}">New Post</a></h3>
+    </div>
+    <div class="post-container">
+		<h3>Drafts</h3>
+		<ul style="list-style-type: none;">
+            {% for post in drafts %}
+			<hr>
+			<li><a href="{{ url_for('post', slug=post.slug) }}"><h4>{{ post.title }}</h4></a></li>
+			<li><em>{{ post.excerpt }}</em></li>
+			<li><p class="meta"><em>{{ post.timestamp }}</em></p></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="post-container">
+		<h3>First World Problems</h3>
+		<ul style="list-style-type: none;">
+            {% for post in first_world_problems %}
+			<hr>
+			<li><a href="{{ url_for('post', slug=post.slug) }}"><h4>{{ post.title }}</h4></a></li>
+			<li><em>{{ post.excerpt }}</em></li>
+			<li><p class="meta"><em>{{ post.timestamp }}</em></p></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="post-container">
+		<h3>Self-actualization</h3>
+		<ul style="list-style-type: none;">
+            {% for post in self_actualization %}
+			<hr>
+			<li><a href="{{ url_for('post', slug=post.slug) }}"><h4>{{ post.title }}</h4></a></li>
+			<li><em>{{ post.excerpt }}</em></li>
+			<li><p class="meta"><em>{{ post.timestamp }}</em></p></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="post-container">
+		<h3>Relationships</h3>
+		<ul style="list-style-type: none;">
+            {% for post in relationships %}
+			<hr>
+			<li><a href="{{ url_for('post', slug=post.slug) }}"><h4>{{ post.title }}</h4></a></li>
+			<li><em>{{ post.excerpt }}</em></li>
+			<li><p class="meta"><em>{{ post.timestamp }}</em></p></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="post-container">
+		<h3>Journal</h3>
+		<ul style="list-style-type: none;">
+            {% for post in journal %}
+			<hr>
+			<li><a href="{{ url_for('post', slug=post.slug) }}"><h4>{{ post.title }}</h4></a></li>
+			<li><em>{{ post.excerpt }}</em></li>
+			<li><p class="meta"><em>{{ post.timestamp }}</em></p></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% else %}
+    <div class="post-container">
+        <h1>This page is only for admins...</h1>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

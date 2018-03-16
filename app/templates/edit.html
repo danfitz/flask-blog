@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Cabin:400,700" rel="stylesheet">
+        {{ pagedown.include_pagedown() }}
+        <style>
+            * {font-family: Cabin;}
+            #title, #slug {width: 70%;}
+            textarea {width: 90%;}
+        </style>
+    </head>
+
+    <body>
+        <div style="text-align: center;">
+            <form action="" method="post" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.submit() }}
+                </p>
+                <p>
+                    {{ form.published() }} ∞ {{ form.published.label }}
+                </p>
+                <p>
+                    {{ form.update_timestamp() }} ∞ {{ form.update_timestamp.label }}
+                <p>
+                    {{ form.featured_img() }} ∞ {{ form.featured_img.label }}<br>
+                    {% for error in form.featured_img.errors %}
+                    <span style="color: red; font-style: italic;">{{ error }}</span>
+                    {% endfor %}
+                </p>
+                <h1>
+                    ∞ {{ form.title.label }} ∞
+                </h1>
+                <p>
+                    {{ form.title() }}<br>
+                    {% for error in form.title.errors %}
+                    <span style="color: red; font-style: italic;">{{ error }}</span>
+                    {% endfor %}
+                <p>
+                <h3>
+                    ∞ {{ form.slug.label }} ∞
+                </h3>
+                <p>
+                    {{ form.slug() }}<br>
+                    {% for error in form.slug.errors %}
+                    <span style="color: red; font-style: italic;">{{ error }}</span>
+                    {% endfor %}
+                <p>
+                <h3>
+                    ∞ {{ form.category.label }} ∞
+                </h3>
+                <p>
+                    {{ form.category() }}<br>
+                    {% for error in form.category.errors %}
+                    <span style="color: red; font-style: italic;">{{ error }}</span>
+                    {% endfor %}
+                </p>
+                <h3>
+                    ∞ {{ form.excerpt.label }} ∞
+                </h3>
+                <p>
+                    {{ form.excerpt(rows=3) }}<br>
+                    {% for error in form.excerpt.errors %}
+                    <span style="color: red; font-style: italic;">{{ error }}</span>
+                    {% endfor %}
+                </p>
+                <h1>
+                    ∞ {{ form.content.label }} ∞
+                </h1>
+                <p>
+                    {{ form.content(only_input=True, rows=20) }}
+                    {% for error in form.content.errors %}
+                    <span style="color: red; font-style: italic;">{{ error }}</span>
+                    {% endfor %}
+                    <hr>
+                    <span style="text-align: left;">{{ form.content(only_preview=True) }}</span><br>
+                    <hr>
+                </p>
+            </form>
+        </div>
+    </body>
+</html>

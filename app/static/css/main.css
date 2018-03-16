@@ -4,9 +4,9 @@
 /* General */
 body {
 	box-sizing: border-box;
-  font-family: Cabin;
-  color: #333;
-  margin: 0 auto;
+  	font-family: Cabin;
+  	color: #333;
+  	margin: 0 auto;
 }
 
 h1, h2, h3, h4 {
@@ -18,11 +18,11 @@ h1 {font-size: 6vmax;}
 h2 {font-size: 5vmax;}
 h3 {font-size: 4vmax;}
 
-p {
+p, ul, ol {
   font-size: 3vmax;
 }
 
-p .meta {
+p.meta {
 	color: #333;
 	font-style: italic;
 	font-size: 2vmax;
@@ -150,12 +150,12 @@ a:hover .featured-image {
 	h2 {font-size: 2.5vmax;}
 	h3 {font-size: 2vmax;}
 
-	p {
+	p, ul, ol {
   		font-size: 1.5vmax;
 	}
 
-	p .meta {
-		font-size: 0.75vmax;
+	p.meta {
+		font-size: 1vmax;
 	}
 
 	#header-nav a {
