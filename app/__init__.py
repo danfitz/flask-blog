@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flaskext.markdown import Markdown
-from flask_bootstrap import Bootstrap
+from flask_pagedown import PageDown
 
 # create app instance and set up config
 app = Flask(__name__)
@@ -20,8 +20,6 @@ login.login_view = "login"
 
 # create markdown functionality
 markdown = Markdown(app)
-
-# create bootstrap functionality (for quick_form)
-bootstrap = Bootstrap(app)
+pagedown = PageDown(app)
 
 from app import routes, models

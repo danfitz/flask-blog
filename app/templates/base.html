@@ -28,7 +28,7 @@
 					{% else %}
 					<a href="{{ url_for('login') }}">
 					{% endif %}
-	          			<img id="footer-author" src="{{ url_for('static', filename='images/icons/me.jpg') }}">
+	          			<img id="footer-author" src="{{ url_for('static', filename='icons/me.jpg') }}">
 					</a>
 	          		<p>I'm a writer, coder, and effective altruist.</p>
 	        	</div>
@@ -46,13 +46,17 @@
 				{% endif %}
 				{% endwith %}
 				<a href="{{ url_for('index') }}">
-					<img id="header-author" src="{{ url_for('static', filename='images/icons/me.jpg') }}">
+					<img id="header-author" src="{{ url_for('static', filename='icons/me.jpg') }}">
 				</a>
 	        	<a id="header-title" href="{{ url_for('index') }}">Dan Fitz</a>
 	        	<p id="header-nav">
-					<a href="/journal">Journal</a>
+					<a href="{{ url_for('journal') }}">Journal</a>
 					<br>
 	          		<a href="#about-footer">About</a>
+					<br>
+					{% if current_user.is_authenticated %}
+					<a href="{{ url_for('new') }}">New</a>
+					{% endif %}
 				</p>
 	      	</div>
 	    </div>

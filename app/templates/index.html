@@ -6,7 +6,11 @@
 		{% for post in posts %}
 			<div class="post-container">
 				<h1><a href="{{ post.slug }}">{{ post.title }}</a></h1>
-				<a href="{{ post.slug }}"><img class="featured-image" src="{{ post.featured_img }}"></a>
+				<a href="{{ post.slug }}">
+					{% if post.featured_img %}
+					<img class="featured-image" src="{{ url_for('static', filename=post.featured_img) }}">
+					{% endif %}
+				</a>
 				{% filter markdown %}{{ post.content }}{% endfilter %}
 			</div>
 		{% endfor %}

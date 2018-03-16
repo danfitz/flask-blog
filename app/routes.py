@@ -1,11 +1,12 @@
 from flask import render_template, url_for, redirect, flash, request
-from app import app, db
+from app import app, db, pagedown
 
 from app.models import Author, Post
 from app.forms import LoginForm, NewPostForm
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from datetime import datetime
+import os
 
 @app.route("/")
 def index():
@@ -23,7 +24,10 @@ def index():
             "featured": url_for("static", filename="images/featured/paper table.jpg")
         }
     ]
-    posts = Post.query.filter_by(category="first-world-problems")
+    posts = Post.query.filter(
+        Post.published==True,
+        Post.category!="journal").order_by(
+            Post.timestamp.desc())
     return render_template("index.html", title="Dan Fitz", posts=posts)
 
 @app.route("/journal")
@@ -43,6 +47,10 @@ def journal():
             "date": "October 19, 2018"
         }
     ]
+    journal_posts = Post.query.filter(
+        Post.published==True,
+        Post.category=="journal").order_by(
+            Post.timestamp.desc())
     return render_template("journal.html", title="Journal", posts=journal_posts)
 
 @app.route("/new", methods=["GET", "POST"])
@@ -56,16 +64,24 @@ def new():
             title=form.title.data,
             slug=form.slug.data,
             category=form.category.data,
-            featured_img=form.featured_img.data,
             excerpt=form.excerpt.data,
-            content=form.content.data
+            content=form.content.data,
+            author=current_user
         )
+
+        post.save_content()
+        
+        img_file = form.featured_img.data
+        if img_file and img_file.filename.endswith(("jpg", "png")):
+            img_path = post.save_img(img_file)
+            post.featured_img = img_path
+
         db.session.add(post)
         db.session.commit()
         if post.published == True:
-            flash("Post {} published!".format(post.title))
+            flash("'{}' published!".format(post.title))
         else:
-            flash("Post {} drafted!".format(post.title))
+            flash("'{}' drafted!".format(post.title))
         return redirect(url_for("index"))
     return render_template("new.html", title="New Post", form=form)
 

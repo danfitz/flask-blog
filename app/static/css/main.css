@@ -151,13 +151,13 @@ a:hover .featured-image {
 	h3 {font-size: 2vmax;}
 
 	p {
-  	font-size: 1.5vmax;
+  		font-size: 1.5vmax;
 	}
 
 	p .meta {
 		font-size: 0.75vmax;
 	}
-	
+
 	#header-nav a {
 		font-size: 3vmax;
 	}
@@ -165,11 +165,11 @@ a:hover .featured-image {
 	#header-title {
 		font-size: 5vmax;
 	}
-	
+
 	.featured-image {
 		width: 50%;
 		float: right;
 		margin: 0 0 2vmax 2vmax;
 	}
-	
+
 }

@@ -10,7 +10,7 @@
 		{% for post in posts %}
 			<div class="post-container">
 				<h2><a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a></h2>
-				<p><em>∞ {{ post.date }} ∞</em></p>
+				<p><em>∞ {{ post.timestamp }} ∞</em></p>
 				<p>{{ post.excerpt }}</p>
 			</div>
 		{% endfor %}
