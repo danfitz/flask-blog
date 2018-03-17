@@ -10,7 +10,9 @@
 	<div class="post-container">
 		<h1>{{ post.title }}</h1>
 		<br>
+		{% if post.featured_img %}
 		<img class="featured-image" src="{{ url_for('static', filename=post.featured_img) }}">
+		{% endif %}
 		{% filter markdown %}{{ post.content }}{% endfilter %}
 	</div>
 </div>

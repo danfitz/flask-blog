@@ -2,6 +2,9 @@
 
 <html>
     <head>
+        {% if title %}
+		<title>{{ title }} - Dan Fitz</title>
+		{% endif %}
         <link href="https://fonts.googleapis.com/css?family=Cabin:400,700" rel="stylesheet">
         {{ pagedown.include_pagedown() }}
         <style>
@@ -58,7 +61,11 @@
                     ∞ {{ form.excerpt.label }} ∞
                 </h3>
                 <p>
-                    {{ form.excerpt(rows=3) }}<br>
+                    <hr>
+                    {{ form.excerpt(only_preview=True) }}<br>
+                    <hr>
+                    <br>
+                    {{ form.excerpt(only_input=True, rows=3) }}
                     {% for error in form.excerpt.errors %}
                     <span style="color: red; font-style: italic;">{{ error }}</span>
                     {% endfor %}
@@ -67,13 +74,14 @@
                     ∞ {{ form.content.label }} ∞
                 </h1>
                 <p>
+                    <hr>
+                    <span style="text-align: left;">{{ form.content(only_preview=True) }}</span><br>
+                    <hr>
+                    <br>
                     {{ form.content(only_input=True, rows=20) }}
                     {% for error in form.content.errors %}
                     <span style="color: red; font-style: italic;">{{ error }}</span>
                     {% endfor %}
-                    <hr>
-                    <span style="text-align: left;">{{ form.content(only_preview=True) }}</span><br>
-                    <hr>
                 </p>
             </form>
         </div>

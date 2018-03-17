@@ -27,11 +27,21 @@ def journal():
             Post.timestamp.desc())
     return render_template("journal.html", title="Journal", posts=journal_posts)
 
-# return specific post according to its unique slug
+# returns specific post according to its unique slug
 @app.route("/post/<slug>")
 def post(slug):
     post = Post.query.filter_by(slug=slug).first_or_404()
     return render_template("post.html", title=post.title, post=post)
+
+# dashboard displaying DRAFTS and then all published posts by categories
+@app.route("/dashboard")
+def dashboard():
+    drafts = Post.query.filter_by(published=False).order_by(Post.timestamp.desc())
+    first_world_problems = Post.query.filter_by(category="first-world-problems").order_by(Post.timestamp.desc())
+    self_actualization = Post.query.filter_by(category="self_actualization").order_by(Post.timestamp.desc())
+    relationships = Post.query.filter_by(category="relationships").order_by(Post.timestamp.desc())
+    journal = Post.query.filter_by(category="journal").order_by(Post.timestamp.desc())
+    return render_template("dashboard.html", title="Dashboard", drafts=drafts, first_world_problems=first_world_problems, self_actualization=self_actualization, relationships=relationships, journal=journal)
 
 # submits new post to database
 @app.route("/new", methods=["GET", "POST"])
@@ -67,6 +77,7 @@ def new():
         else:
             flash("'{}' drafted!".format(post.title))
         return redirect(url_for("index"))
+
     return render_template("new.html", title="New Post", form=form)
 
 # edits posts already in database
@@ -76,12 +87,23 @@ def edit(slug):
     # grabs post by slug
     post = Post.query.filter_by(slug=slug).first()
     form = PublishForm()
-    if form.validate_on_submit():
+
+    # populates form with current post instance's attributes when entering editing page
+    if request.method == "GET":
+        form.published.data = post.published
+        form.title.data = post.title
+        form.slug.data = post.slug
+        form.category.data = post.category
+        form.excerpt.data = post.excerpt
+        form.content.data = post.content
+
+    elif form.validate_on_submit():
         # updates post instance's attributes
         if form.slug.data != post.slug:
             # deletes backup folder if slug was changed
             shutil.rmtree(os.path.join(app.config["STATIC_FOLDER"] + os.path.sep + "posts" + os.path.sep + post.slug))
         if form.update_timestamp.data == True:
+            # updates timestamp to current time IF prompted by user
             post.timestamp = datetime.utcnow()
         post.published = form.published.data
         post.title = form.title.data
@@ -90,7 +112,7 @@ def edit(slug):
         post.excerpt = form.excerpt.data
         post.content = form.content.data
 
-        # if the slug was new, creates new folder and new files
+        # if the slug was new, creates new folder and new files (after the original was deleted)
         # if slug was the same, keeps folder but overrides old files
         post.save_content()
         img_file = form.featured_img.data
@@ -108,42 +130,35 @@ def edit(slug):
             flash("'{}' drafted!".format(post.title))
         return redirect(url_for("post", slug=post.slug))
 
-    # populates form with current post instance's attributes when entering form
-    elif request.method == "GET":
-        form.published.data = post.published
-        form.title.data = post.title
-        form.slug.data = post.slug
-        form.category.data = post.category
-        form.excerpt.data = post.excerpt
-        form.content.data = post.content
-
     return render_template("edit.html", title="Edit Post", form=form)
 
-@app.route("/dashboard")
-def dashboard():
-    drafts = Post.query.filter_by(published=False).order_by(Post.timestamp.desc())
-    first_world_problems = Post.query.filter_by(category="first-world-problems").order_by(Post.timestamp.desc())
-    self_actualization = Post.query.filter_by(category="self_actualization").order_by(Post.timestamp.desc())
-    relationships = Post.query.filter_by(category="relationships").order_by(Post.timestamp.desc())
-    journal = Post.query.filter_by(category="journal").order_by(Post.timestamp.desc())
-    return render_template("dashboard.html", title="Dashboard", drafts=drafts, first_world_problems=first_world_problems, self_actualization=self_actualization, relationships=relationships, journal=journal)
-
+# login page
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for("index"))
     form = LoginForm()
     if form.validate_on_submit():
+        # grabs author instance from username provided in login form
         author = Author.query.filter_by(username=form.username.data).first()
+
+        # flashes error if username or password invalid upon form submission
         if author is None or not author.check_password(form.password.data):
             flash("Invalid username or password")
             return redirect(url_for("login"))
+
+        # logs in user
         login_user(author, remember=form.remember_me.data)
         flash("Hi, {}!".format(author.username))
+
+        # sends user to the page in "next" arg
         next_page = request.args.get("next")
+        # if there is no "next" arg or there is a netloc in the "next" arg, sends to index
+        ## note: this is used to prevent malicious redirects
         if not next_page or url_parse(next_page).netloc != "":
             next_page = url_for("index")
         return redirect(next_page)
+        
     return render_template("login.html", title="Log In", form=form)
 
 @app.route("/logout")

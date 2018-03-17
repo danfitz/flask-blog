@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, FileField, TextAreaField
 from flask_pagedown.fields import PageDownField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Length
 
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
@@ -11,14 +11,19 @@ class LoginForm(FlaskForm):
 
 class PublishForm(FlaskForm):
     published = BooleanField("Publish?", default=True)
-    update_timestamp = BooleanField("Update timestamp?")
+    update_timestamp = BooleanField("Update Timestamp?")
+    featured_img = FileField("Featured Image")
     title = StringField("Title", validators=[DataRequired()])
     slug = StringField("Slug", validators=[DataRequired()])
     category = SelectField(
         "Category",
-        choices=[("journal", "Journal"), ("first-world-problems", "First World Problems"), ("self-actualization", "Self-actualization"), ("relationships", "Relationships")]
+        choices=[
+            ("journal", "Journal"),
+            ("first-world-problems", "First World Problems"),
+            ("self-actualization", "Self-actualization"),
+            ("relationships", "Relationships")
+        ]
     )
-    featured_img = FileField("Featured Image")
-    excerpt = PageDownField("Excerpt", validators=[DataRequired()])
+    excerpt = PageDownField("Excerpt", validators=[DataRequired(), Length(min=10, max=100)])
     content = PageDownField("Content", validators=[DataRequired()])
     submit = SubmitField("Post")

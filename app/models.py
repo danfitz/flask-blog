@@ -2,7 +2,6 @@ from app import app, db, login
 from flask_login import UserMixin
 
 from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
 
@@ -13,7 +12,7 @@ class Author(UserMixin, db.Model):
     posts = db.relationship("Post", backref="author", lazy="dynamic")
 
     def __repr__(self):
-        return "<User {}>".format(self.username)
+        return "<Author Instance: {}>".format(self.username)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -33,12 +32,25 @@ class Post(db.Model):
     slug = db.Column(db.String(50), unique=True)
     category = db.Column(db.String(20))
     featured_img = db.Column(db.String(200))
-    excerpt = db.Column(db.String(50))
+    excerpt = db.Column(db.String(200))
     content = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey("author.id"))
 
     def __repr__(self):
-        return "<Post {}>".format(self.title)
+        return "<Post Instance: {}>".format(self.title)
+
+    def save_content(self):
+        static_folder = app.config["STATIC_FOLDER"]
+        post_folder = os.path.join("posts", self.slug)
+        abs_folder = os.path.join(static_folder, post_folder)
+
+        if not os.path.exists(abs_folder):
+            os.makedirs(abs_folder)
+
+        post_filename = os.path.join(abs_folder, "{}.md".format(self.slug))
+        post_file = open(post_filename, "w")
+        post_file.write(self.content)
+        post_file.close()
 
     def save_img(self, img_file):
         static_folder = app.config["STATIC_FOLDER"]
@@ -53,16 +65,3 @@ class Post(db.Model):
 
         img_path = os.path.join(post_folder, img_filename)
         return img_path
-
-    def save_content(self):
-        static_folder = app.config["STATIC_FOLDER"]
-        post_folder = os.path.join("posts", self.slug)
-        abs_folder = os.path.join(static_folder, post_folder)
-
-        if not os.path.exists(abs_folder):
-            os.makedirs(abs_folder)
-
-        post_filename = os.path.join(abs_folder, "{}.md".format(self.slug))
-        post_file = open(post_filename, "w")
-        post_file.write(self.content)
-        post_file.close()
