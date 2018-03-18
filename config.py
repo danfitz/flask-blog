@@ -10,3 +10,5 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     STATIC_FOLDER = (os.path.sep).join(["app", "static"])
+
+    POSTS_PER_PAGE = 1

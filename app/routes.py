@@ -11,21 +11,33 @@ import os, shutil
 # returns index.html showing non-journal posts in descending timestamp order
 @app.route("/")
 def index():
+    page = request.args.get("page", 1, type=int)
     posts = Post.query.filter(
         Post.published==True,
         Post.category!="journal").order_by(
-            Post.timestamp.desc())
-    return render_template("index.html", title="Dan Fitz", posts=posts)
+            Post.timestamp.desc()).paginate(
+                page, app.config["POSTS_PER_PAGE"], False)
+    next_url = url_for("index", page=posts.next_num) \
+        if posts.has_next else None
+    prev_url = url_for("index", page=posts.prev_num) \
+        if posts.has_prev else None
+    return render_template("index.html", title="Dan Fitz", posts=posts.items, next_url=next_url, prev_url=prev_url)
 
 # returns journal.html showing journal posts in descending timestamp order
 @app.route("/journal")
 @login_required
 def journal():
+    page = request.args.get("page", 1, type=int)
     journal_posts = Post.query.filter(
         Post.published==True,
         Post.category=="journal").order_by(
-            Post.timestamp.desc())
-    return render_template("journal.html", title="Journal", posts=journal_posts)
+            Post.timestamp.desc()).paginate(
+                page, app.config["POSTS_PER_PAGE"], False)
+    next_url = url_for("journal", page=journal_posts.next_num) \
+        if journal_posts.has_next else None
+    prev_url = url_for("journal", page=journal_posts.prev_num) \
+        if journal_posts.has_prev else None
+    return render_template("journal.html", title="Journal", posts=journal_posts.items, next_url=next_url, prev_url=prev_url)
 
 # returns specific post according to its unique slug
 @app.route("/post/<slug>")
@@ -158,7 +170,7 @@ def login():
         if not next_page or url_parse(next_page).netloc != "":
             next_page = url_for("index")
         return redirect(next_page)
-        
+
     return render_template("login.html", title="Log In", form=form)
 
 @app.route("/logout")

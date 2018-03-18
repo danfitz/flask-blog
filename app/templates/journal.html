@@ -15,5 +15,14 @@
 			</div>
 		{% endfor %}
 
+		<div class="post-container">
+			{% if prev_url %}
+			<a href="{{ prev_url }}" style="float: left;"><< Newer Posts</a>
+			{% endif %}
+			{% if next_url %}
+			<a href="{{ next_url }}" style="float: right;">Older Posts >></a>
+			{% endif %}
+		</div>
+
 	</div>
 {% endblock %}
