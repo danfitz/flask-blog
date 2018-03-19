@@ -7,5 +7,6 @@ venv/
 # ignores db file
 danielfitz.db
 
-# ignores posts
+# ignores files in posts folder
 posts/
+!posts/.gitkeep
