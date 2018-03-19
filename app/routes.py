@@ -1,5 +1,5 @@
 from flask import render_template, url_for, redirect, flash, request
-from app import app, db, pagedown
+from app import app, db
 
 from app.models import Author, Post
 from app.forms import LoginForm, PublishForm
@@ -53,7 +53,8 @@ def dashboard():
     self_actualization = Post.query.filter_by(category="self_actualization").order_by(Post.timestamp.desc())
     relationships = Post.query.filter_by(category="relationships").order_by(Post.timestamp.desc())
     journal = Post.query.filter_by(category="journal").order_by(Post.timestamp.desc())
-    return render_template("dashboard.html", title="Dashboard", drafts=drafts, first_world_problems=first_world_problems, self_actualization=self_actualization, relationships=relationships, journal=journal)
+    categories = zip([drafts, first_world_problems, self_actualization, relationships, journal], ["Drafts", "First World Problems", "Self-actualization", "Relationships", "Journal"])
+    return render_template("dashboard.html", title="Dashboard", categories=categories)
 
 # submits new post to database
 @app.route("/new", methods=["GET", "POST"])
@@ -168,7 +169,7 @@ def login():
         # if there is no "next" arg or there is a netloc in the "next" arg, sends to index
         ## note: this is used to prevent malicious redirects
         if not next_page or url_parse(next_page).netloc != "":
-            next_page = url_for("index")
+            next_page = url_for("dashboard")
         return redirect(next_page)
 
     return render_template("login.html", title="Log In", form=form)

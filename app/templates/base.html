@@ -9,6 +9,10 @@
 		{% endif %}
 		<!-- link to main stylesheet -->
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+
+		<!-- flask-moment requirements -->
+		{{ moment.include_jquery() }}
+	    {{ moment.include_moment() }}
 	</head>
 
 <!----------------------->

@@ -9,7 +9,9 @@
 	{% endif %}
 	<div class="post-container">
 		<h1>{{ post.title }}</h1>
-		<br>
+		{% if post.category == "journal" %}
+		<p class="meta"><em>∞ {{ moment(post.timestamp).format('LLL') }} ∞</em></p>
+		{% endif %}
 		{% if post.featured_img %}
 		<img class="featured-image" src="{{ url_for('static', filename=post.featured_img) }}">
 		{% endif %}
