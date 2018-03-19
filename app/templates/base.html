@@ -54,13 +54,14 @@
 				</a>
 	        	<a id="header-title" href="{{ url_for('index') }}">Dan Fitz</a>
 	        	<p id="header-nav">
+					{% if current_user.is_authenticated %}
 					<a href="{{ url_for('journal') }}">Journal</a>
 					<br>
-	          		<a href="#about-footer">About</a>
-					<br>
-					{% if current_user.is_authenticated %}
 					<a href="{{ url_for('dashboard') }}">Dashboard</a>
 					{% endif %}
+					<br>
+	          		<a href="#about-footer">About</a>
+
 				</p>
 	      	</div>
 	    </div>

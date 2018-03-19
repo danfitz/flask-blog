@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="posts">
+    <div class="post-container">
+        <h1>Sorry...</h1>
+        <p>Looks like there's something wrong in the code... Please feel free to <a href="mailto:8danfitz8@gmail.com">email me</a>, and I'll look into it.</p>
+        <h3><a href="{{ request.referrer or url_for('index') }}"><< Back Home</a></h3>
+        <img src="http://thecatapi.com/api/images/get?format=src&type=gif">
+    </div>
+</div>
+{% endblock %}

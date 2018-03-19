@@ -2,14 +2,21 @@
 
 {% block content %}
 <div id="posts">
+
 	{% if current_user.is_authenticated %}
 	<div class="post-container">
 		<a href="{{ url_for('edit', slug=post.slug) }}">Edit</a>
 	</div>
 	{% endif %}
+
 	<div class="post-container">
+		{% if post.category=="journal" %}
+		<h4><a href="{{ url_for('journal') }}"><< Back</a></h4>
+		{% else %}
+		<h4><a href="{{ url_for('index') }}"><< Back</a></h4>
+		{% endif %}
 		<h1>{{ post.title }}</h1>
-		{% if post.category == "journal" %}
+		{% if post.category=="journal" %}
 		<p class="meta"><em>∞ {{ moment(post.timestamp).format('LLL') }} ∞</em></p>
 		{% endif %}
 		{% if post.featured_img %}
