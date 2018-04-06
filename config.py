@@ -9,6 +9,6 @@ class Config(object):
         "sqlite:///" + os.path.join(basedir, "danielfitz.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    STATIC_FOLDER = (os.path.sep).join(["app", "static"])
+    STATIC_FOLDER = (os.path.sep).join([basedir, "app", "static"])
 
     POSTS_PER_PAGE = 10
