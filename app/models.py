@@ -32,7 +32,7 @@ class Post(db.Model):
     slug = db.Column(db.String(50), unique=True)
     category = db.Column(db.String(20))
     featured_img = db.Column(db.String(200))
-    excerpt = db.Column(db.String(200))
+    excerpt = db.Column(db.Text)
     content = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey("author.id"))
 
