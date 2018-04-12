@@ -11,4 +11,4 @@ class Config(object):
 
     STATIC_FOLDER = (os.path.sep).join(["app", "static"])
 
-    POSTS_PER_PAGE = 1
+    POSTS_PER_PAGE = 10
