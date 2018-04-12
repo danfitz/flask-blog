@@ -24,6 +24,6 @@ class PublishForm(FlaskForm):
             ("relationships", "Relationships")
         ]
     )
-    excerpt = PageDownField("Excerpt", validators=[DataRequired(), Length(min=10, max=100)])
+    excerpt = PageDownField("Excerpt", validators=[DataRequired()])
     content = PageDownField("Content", validators=[DataRequired()])
     submit = SubmitField("Post")
