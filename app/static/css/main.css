@@ -49,8 +49,8 @@ hr {
 
 #content {
   float: left;
-  width: 80%;
-  display: block;
+  width: 100%;
+  display: table-footer-group;
   background-color: #ffc405;
 }
 
@@ -60,25 +60,28 @@ hr {
 
 /* Header */
 
+/* wrap + table-header-group + table-footer-group moves the sidebar header to top */
+#wrap {
+    display: table;
+    width: 100%;
+}
+
 #header {
-  float: right;
-  width: 20%;
-  height: 100%;
-  display: inline-block;
-  position: fixed;
-  text-align: center;
+  width: 100%;
+  height: 15vmax;
+  display: table-header-group;
+  position: static;
   background-color: #4169e1;
   font-weight: 700;
 }
 
 #header-author {
-  height: 80%;
-  width: 80%;
-  display: block;
-  margin: 40px auto;
-	padding: 0;
+  height: 20vmax;
+  width: 20vmax;
+  display: inline-block;
+  margin: 2vmax 0 0 5vmax;
   border-radius: 180px;
-	border: 0.5vmax solid #333;
+  border: 0.5vmax solid #333;
 }
 
 #header-author:hover {
@@ -98,14 +101,21 @@ hr {
 }
 
 #header-nav {
+    display: block;
+    vertical-align: top;
+    padding-left: 5vmax;
 }
 
 #header-nav a {
-  font-size: 3vmax;
+  font-size: 5vmax;
+  vertical-align: top;
 }
 
 #header-title {
-  font-size: 6vmax;
+  font-size: 10vmax;
+  padding: 5vmax 5vmax 0 5vmax;
+  vertical-align: top;
+  display: inline-block;
 }
 
 /* Posts */
@@ -185,18 +195,56 @@ a:hover .featured-image {
 		font-size: 1vmax;
 	}
 
-	#header-nav a {
-		font-size: 3vmax;
-	}
-
-	#header-title {
-		font-size: 5vmax;
-	}
-
 	.featured-image {
 		width: 50%;
 		float: right;
 		margin: 0 0 2vmax 2vmax;
 	}
+
+
+
+#content {
+  width: 80%;
+  display: block;
+}
+
+#header {
+  float: right;
+  width: 20%;
+  height: 100%;
+  display: inline-block;
+  position: fixed;
+  text-align: center;
+  background-color: #4169e1;
+  font-weight: 700;
+}
+
+#header-author {
+  height: 80%;
+  width: 80%;
+  display: block;
+  margin: 40px auto;
+  padding: 0;
+  border-radius: 180px;
+  border: 0.5vmax solid #333;
+}
+
+#header-nav {
+  vertical-align: baseline;
+  padding: 0;
+}
+
+#header-nav a {
+  font-size: 3vmax;
+}
+
+#header-title {
+    font-size: 5vmax;
+    padding: 0;
+    vertical-align: baseline;
+}
+
+
+
 
 }
