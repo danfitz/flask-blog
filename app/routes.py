@@ -49,10 +49,10 @@ def post(slug):
 @app.route("/dashboard")
 def dashboard():
     drafts = Post.query.filter_by(published=False).order_by(Post.timestamp.desc())
-    first_world_problems = Post.query.filter_by(category="first-world-problems").order_by(Post.timestamp.desc())
-    self_actualization = Post.query.filter_by(category="self_actualization").order_by(Post.timestamp.desc())
-    relationships = Post.query.filter_by(category="relationships").order_by(Post.timestamp.desc())
-    journal = Post.query.filter_by(category="journal").order_by(Post.timestamp.desc())
+    first_world_problems = Post.query.filter_by(published=True, category="first-world-problems").order_by(Post.timestamp.desc())
+    self_actualization = Post.query.filter_by(published=True, category="self_actualization").order_by(Post.timestamp.desc())
+    relationships = Post.query.filter_by(published=True, category="relationships").order_by(Post.timestamp.desc())
+    journal = Post.query.filter_by(published=True, category="journal").order_by(Post.timestamp.desc())
     categories = zip([drafts, first_world_problems, self_actualization, relationships, journal], ["Drafts", "First World Problems", "Self-actualization", "Relationships", "Journal"])
     return render_template("dashboard.html", title="Dashboard", categories=categories)
 
