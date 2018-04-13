@@ -1,10 +1,10 @@
 /* Google Font Import */
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700');
+@import url('https://fonts.googleapis.com/css?family=Anonymous+Pro|Cabin:400,700');
 
 /* General */
 body {
 	box-sizing: border-box;
-  	font-family: "Source Sans Pro", sans-serif;
+  	font-family: "Anonymous Pro", monospace;
   	color: #333;
   	margin: 0 auto;
 }
@@ -20,6 +20,15 @@ h3 {font-size: 4vmax;}
 
 p, ul, ol {
   font-size: 3vmax;
+}
+
+ul, ol {
+  font-weight: 700;
+  text-shadow: 0.1vmax 0.1vmax 0.3vmax white;
+}
+
+li {
+    padding: 1vmax 0 1vmax 0;
 }
 
 p.meta {
@@ -52,6 +61,7 @@ hr {
 /* Header */
 
 #header {
+/*  font-family: "Cabin", sans-serif; */
   float: right;
   width: 20%;
   height: 100%;
@@ -59,6 +69,7 @@ hr {
   position: fixed;
   text-align: center;
   background-color: #4169e1;
+  font-weight: 700;
 }
 
 #header-author {
@@ -104,7 +115,7 @@ hr {
 }
 
 .post-container {
-  padding: 2vmax 2vmax 4vmax 2vmax;
+  padding: 2vmax 4vmax 4vmax 4vmax;
 	clear: right; /* this clears the float: right in the .featured-image selector */
 }
 
@@ -149,7 +160,11 @@ a:hover .featured-image {
   height: 20%;
   width: 20%;
   border-radius: 180px;
-  border: 0.5vw solid #ffc405;
+  border: 0.5vmax solid #4169e1;
+}
+
+#footer-author:hover {
+  border: 0.5vmax solid #ffc405;
 }
 
 #about-footer .container {
