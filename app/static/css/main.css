@@ -140,11 +140,16 @@ a:hover .featured-image {
   text-align: center;
 }
 
+#about-footer a {
+  text-decoration: none;
+  color: #4169e1;
+}
+
 #footer-author {
   height: 20%;
   width: 20%;
   border-radius: 180px;
-	border: 0.5vw solid #ffc405;
+  border: 0.5vw solid #ffc405;
 }
 
 #about-footer .container {
