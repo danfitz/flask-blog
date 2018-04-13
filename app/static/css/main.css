@@ -1,10 +1,10 @@
 /* Google Font Import */
-@import url('https://fonts.googleapis.com/css?family=Cabin:400,700');
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700');
 
 /* General */
 body {
 	box-sizing: border-box;
-  	font-family: Cabin;
+  	font-family: "Source Sans Pro", sans-serif;
   	color: #333;
   	margin: 0 auto;
 }
@@ -26,6 +26,14 @@ p.meta {
 	color: #333;
 	font-style: italic;
 	font-size: 2vmax;
+}
+
+hr {
+    margin-left: 0;
+    height: 3px;
+    color: #4169e1;
+    background-color: #4169e1;
+    width: 35%;
 }
 
 /* Content */

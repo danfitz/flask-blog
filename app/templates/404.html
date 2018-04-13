@@ -5,7 +5,7 @@
     <div class="post-container">
         <h1>Uh Oh...</h1>
         <p>Looks like you took a wrong turn...</p>
-        <h3><a href="{{ prev_page }}"><< Back Home</a></h3>
+        <h3><a href="{{ request.referrer or url_for('index') }}"><< Back</a></h3>
         <img src="http://thecatapi.com/api/images/get?format=src&type=gif">
     </div>
 </div>

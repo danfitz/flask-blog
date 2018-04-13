@@ -11,16 +11,16 @@
 
 	<div class="post-container">
 		{% if post.category=="journal" %}
-		<h4><a href="{{ url_for('journal') }}"><< Back</a></h4>
+		<h4><a href="{{ request.referrer or url_for('journal') }}"><< Back</a></h4>
 		{% else %}
-		<h4><a href="{{ url_for('index') }}"><< Back</a></h4>
+		<h4><a href="{{ request.referrer or url_for('index') }}"><< Back</a></h4>
 		{% endif %}
 		<h1>{{ post.title }}</h1>
 		{% if post.category=="journal" %}
 		<p class="meta"><em>∞ {{ moment(post.timestamp).format('LLL') }} ∞</em></p>
 		{% endif %}
 		{% if post.featured_img %}
-		<img class="featured-image" src="{{ url_for('static', filename=post.featured_img) }}">
+        <img class="featured-image" src="{{ post.featured_img }}">
 		{% endif %}
 		{% filter markdown %}{{ post.content }}{% endfilter %}
 	</div>

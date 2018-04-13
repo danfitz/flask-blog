@@ -66,6 +66,7 @@ def new():
         post = Post(
             timestamp=datetime.utcnow(),
             published=form.published.data,
+            featured_img=form.featured_img.data,
             title=form.title.data,
             slug=form.slug.data,
             category=form.category.data,
@@ -73,13 +74,6 @@ def new():
             content=form.content.data,
             author=current_user
         )
-
-        # saves post markdown file and image file into app/static/posts/<slug> folder
-        post.save_content()
-        img_file = form.featured_img.data
-        if img_file and img_file.filename.endswith(("jpg", "png")):
-            img_path = post.save_img(img_file)
-            post.featured_img = img_path
 
         # commits post instance to database
         db.session.add(post)
@@ -104,6 +98,7 @@ def edit(slug):
     # populates form with current post instance's attributes when entering editing page
     if request.method == "GET":
         form.published.data = post.published
+        form.featured_img.data = post.featured_img
         form.title.data = post.title
         form.slug.data = post.slug
         form.category.data = post.category
@@ -111,27 +106,16 @@ def edit(slug):
         form.content.data = post.content
 
     elif form.validate_on_submit():
-        # updates post instance's attributes
-        if form.slug.data != post.slug:
-            # deletes backup folder if slug was changed
-            shutil.rmtree(os.path.join(app.config["STATIC_FOLDER"] + os.path.sep + "posts" + os.path.sep + post.slug))
         if form.update_timestamp.data == True:
             # updates timestamp to current time IF prompted by user
             post.timestamp = datetime.utcnow()
         post.published = form.published.data
+        post.featured_img = form.featured_img.data
         post.title = form.title.data
         post.slug = form.slug.data
         post.category = form.category.data
         post.excerpt = form.excerpt.data
         post.content = form.content.data
-
-        # if the slug was new, creates new folder and new files (after the original was deleted)
-        # if slug was the same, keeps folder but overrides old files
-        post.save_content()
-        img_file = form.featured_img.data
-        if img_file and img_file.filename.endswith(("jpg", "png")):
-            img_path = post.save_img(img_file)
-            post.featured_img = img_path
 
         # commits post instance to database
         db.session.add(post)

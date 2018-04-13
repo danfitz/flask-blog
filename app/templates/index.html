@@ -8,7 +8,7 @@
 				<h1><a href="{{ url_for('post', slug=post.slug) }}">{{ post.title }}</a></h1>
 				{% if post.featured_img %}
 				<a href="{{ url_for('post', slug=post.slug) }}">
-					<img class="featured-image" src="{{ url_for('static', filename=post.featured_img) }}">
+                    <img class="featured-image" src="{{ post.featured_img }}">
 				</a>
 				{% endif %}
 				{% filter markdown %}{{ post.content }}{% endfilter %}
